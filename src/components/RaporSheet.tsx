@@ -106,7 +106,7 @@ export const RaporSheet: React.FC<RaporSheetProps> = ({ student, showWatermark =
   };
 
   return (
-    <div className="bg-white text-slate-900 font-sans p-6 sm:p-10 max-w-[210mm] mx-auto shadow-xl border border-slate-200 rounded-lg print:shadow-none print:border-none print:p-0 print:m-0 print:max-w-none text-xs leading-relaxed relative">
+    <div className="bg-white text-slate-900 font-sans p-6 sm:p-10 max-w-[210mm] mx-auto shadow-xl border border-slate-200 rounded-lg print:shadow-none print:border-none print:p-[12mm_15mm] print:m-0 print:max-w-none text-xs leading-relaxed relative">
       {/* Official Kop Rapor SMA Negeri 1 Kakas */}
       <div className="border-b-2 border-slate-900 pb-3 mb-4 text-center relative">
         <div className="flex items-center justify-between">

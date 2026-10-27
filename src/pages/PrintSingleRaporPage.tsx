@@ -9,7 +9,7 @@ import {
   Download,
   Loader2,
 } from 'lucide-react';
-import html2canvas from 'html2canvas';
+import { toPng } from 'html-to-image';
 import jsPDF from 'jspdf';
 import { useApp } from '../context/AppContext';
 import { RaporSheet } from '../components/RaporSheet';
@@ -44,33 +44,42 @@ export const PrintSingleRaporPage: React.FC<PrintSingleRaporProps> = ({ initialS
 
     try {
       const element = raporRef.current;
-      const canvas = await html2canvas(element, {
-        scale: 2,
-        useCORS: true,
-        logging: false,
+      
+      // Gunakan html-to-image yang mengeksekusi rendering browser asli
+      // sehingga warna CSS modern seperti oklch() diproses tanpa error
+      const dataUrl = await toPng(element, {
+        quality: 0.98,
+        pixelRatio: 2,
         backgroundColor: '#ffffff',
+        cacheBust: true,
       });
 
-      const imgData = canvas.toDataURL('image/png');
       const pdf = new jsPDF({
         orientation: 'portrait',
         unit: 'mm',
         format: 'a4',
       });
 
-      const imgWidth = 210; // A4 width mm
-      const pageHeight = 297; // A4 height mm
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      const img = new Image();
+      img.src = dataUrl;
+      await new Promise<void>((resolve, reject) => {
+        img.onload = () => resolve();
+        img.onerror = () => reject(new Error('Gagal memuat visual rapor'));
+      });
+
+      const imgWidth = 210; // A4 lebar (mm)
+      const pageHeight = 297; // A4 tinggi (mm)
+      const imgHeight = (img.height * imgWidth) / img.width;
       let heightLeft = imgHeight;
       let position = 0;
 
-      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+      pdf.addImage(dataUrl, 'PNG', 0, position, imgWidth, imgHeight, undefined, 'FAST');
       heightLeft -= pageHeight;
 
-      while (heightLeft > 0) {
-        position = heightLeft - imgHeight;
+      while (heightLeft > 5) {
+        position -= pageHeight;
         pdf.addPage();
-        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+        pdf.addImage(dataUrl, 'PNG', 0, position, imgWidth, imgHeight, undefined, 'FAST');
         heightLeft -= pageHeight;
       }
 
@@ -78,7 +87,7 @@ export const PrintSingleRaporPage: React.FC<PrintSingleRaporProps> = ({ initialS
       pdf.save(fileName);
     } catch (err: any) {
       console.error('PDF generation error', err);
-      alert('Gagal menghasilkan file PDF: ' + err.message);
+      alert('Gagal menghasilkan file PDF: ' + (err?.message || 'Terjadi gangguan sistem'));
     } finally {
       setIsGeneratingPdf(false);
     }
@@ -207,6 +216,19 @@ export const PrintSingleRaporPage: React.FC<PrintSingleRaporProps> = ({ initialS
             <span>Cetak Dokumen</span>
           </button>
         </div>
+      </div>
+
+      {/* Info notice (hidden in print) */}
+      <div className="bg-emerald-50/70 border border-emerald-200 p-3 rounded-xl text-xs text-emerald-900 flex items-center justify-between gap-2 print:hidden">
+        <div className="flex items-center gap-2">
+          <CheckCircle className="w-4 h-4 text-emerald-600 shrink-0" />
+          <span>
+            <strong>Siap Cetak & Unduh:</strong> Header dan footer browser (URL, tanggal, judul halaman) otomatis dihilangkan saat mencetak atau menyimpan dokumen (margin standar 0mm).
+          </span>
+        </div>
+        <span className="hidden sm:inline-block text-[11px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full">
+          Format A4 Resmi PPA 2025
+        </span>
       </div>
 
       {/* Rapor Sheet Container */}

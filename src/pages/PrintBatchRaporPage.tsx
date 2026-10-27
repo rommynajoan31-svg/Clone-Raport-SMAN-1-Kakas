@@ -80,10 +80,15 @@ export const PrintBatchRaporPage: React.FC = () => {
       </div>
 
       {/* Info notice (hidden in print) */}
-      <div className="bg-blue-50/70 border border-blue-200 p-3 rounded-xl text-xs text-blue-900 flex items-center gap-2 print:hidden">
-        <Info className="w-4 h-4 text-blue-600 shrink-0" />
-        <span>
-          Setiap rapor murid telah dikonfigurasi dengan jeda halaman (page-break). Saat mencetak atau memilih "Simpan ke PDF", masing-masing murid akan berada di halaman terpisah.
+      <div className="bg-blue-50/70 border border-blue-200 p-3 rounded-xl text-xs text-blue-900 flex items-center justify-between gap-2 print:hidden">
+        <div className="flex items-center gap-2">
+          <Info className="w-4 h-4 text-blue-600 shrink-0" />
+          <span>
+            Setiap rapor murid dilengkapi jeda halaman otomatis (page-break). Header dan footer bawaan browser (URL & tanggal) otomatis dihilangkan saat mencetak atau memilih "Simpan ke PDF".
+          </span>
+        </div>
+        <span className="hidden sm:inline-block text-[11px] bg-blue-100 text-blue-800 font-bold px-2 py-0.5 rounded-full shrink-0">
+          Margin 0mm Standar
         </span>
       </div>
 
