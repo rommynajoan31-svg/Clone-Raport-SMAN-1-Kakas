@@ -24,7 +24,7 @@ interface NavbarProps {
 }
 
 export const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar, isSidebarOpen }) => {
-  const { schoolProfile, currentUser, accounts, setCurrentUser, resetAllData } = useApp();
+  const { schoolProfile, currentUser, accounts, setCurrentUser, resetAllData, updateSchoolProfile } = useApp();
   const [showRoleMenu, setShowRoleMenu] = useState(false);
   const [showConfirmReset, setShowConfirmReset] = useState(false);
 
@@ -75,15 +75,23 @@ export const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar, isSidebarOpen }
           </div>
         </div>
 
-        {/* Center: Semester & TP badge */}
-        <div className="hidden md:flex items-center gap-2 bg-slate-100/80 px-3 py-1.5 rounded-full border border-slate-200/80 text-xs text-slate-700">
+        {/* Center: Semester & TP badge with quick toggle */}
+        <div className="hidden md:flex items-center gap-2 bg-slate-100/90 px-3 py-1.5 rounded-full border border-slate-200/80 text-xs text-slate-700">
           <span className="flex items-center gap-1 font-semibold text-slate-800">
             <Calendar className="w-3.5 h-3.5 text-blue-600" /> TP {schoolProfile.tahunPelajaranAktif}
           </span>
           <span className="text-slate-300">•</span>
-          <span className="flex items-center gap-1 font-semibold text-blue-700">
-            <Layers className="w-3.5 h-3.5" /> Semester {schoolProfile.semesterAktif === '1' ? 'Ganjil' : 'Genap'}
-          </span>
+          <button
+            onClick={() => updateSchoolProfile({ semesterAktif: schoolProfile.semesterAktif === '1' ? '2' : '1' })}
+            title="Klik untuk beralih antara Semester Ganjil & Genap"
+            className="flex items-center gap-1.5 font-bold px-2 py-0.5 rounded-full bg-white text-blue-800 hover:bg-blue-50 border border-blue-200 transition-all cursor-pointer shadow-2xs"
+          >
+            <Layers className="w-3.5 h-3.5 text-blue-600" />
+            <span>Semester {schoolProfile.semesterAktif === '1' ? '1 (Ganjil)' : '2 (Genap)'}</span>
+            <span className="text-[9.5px] bg-blue-100 px-1.5 py-0.2 rounded text-blue-900 font-semibold">
+              {schoolProfile.semesterAktif === '1' ? 'Ganti ke Genap' : 'Ganti ke Ganjil'}
+            </span>
+          </button>
         </div>
 
         {/* Right: Role Switcher & User Profile */}

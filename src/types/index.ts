@@ -64,6 +64,7 @@ export interface Student {
   phase: 'E' | 'F';
   grade: 10 | 11 | 12;
   electiveSubjectIds?: string[]; // Mata pelajaran pilihan untuk Fase F
+  promotionDecision?: string; // Pernyataan Kenaikan Kelas / Kelulusan (Semester Genap)
 }
 
 export interface Teacher {

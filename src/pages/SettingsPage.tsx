@@ -189,7 +189,7 @@ export const SettingsPage: React.FC = () => {
               <div className="bg-slate-50 p-3 rounded-xl border border-slate-200 flex items-center gap-3">
                 <div className="w-14 h-14 bg-white rounded-lg border border-slate-300 flex items-center justify-center p-1 shrink-0 overflow-hidden">
                   <img
-                    src={profileForm.logoUrl || '/assets/aistudio/WhatsApp_Image_2025-11-20_at_12.29.19-removebg-preview_a44ed99c.png'}
+                    src={profileForm.logoUrl || '/assets/aistudio/WhatsApp_Image_2025-11-20_at_12.29.19-removebg-preview__1__c9a0a08a.png'}
                     alt="Logo Sekolah"
                     className="w-full h-full object-contain"
                   />
@@ -198,7 +198,7 @@ export const SettingsPage: React.FC = () => {
                   <label className="block font-bold text-slate-700 text-[11px] mb-0.5">Logo Kanan: SMA Negeri 1 Kakas</label>
                   <input
                     type="text"
-                    value={profileForm.logoUrl || '/assets/aistudio/WhatsApp_Image_2025-11-20_at_12.29.19-removebg-preview_a44ed99c.png'}
+                    value={profileForm.logoUrl || '/assets/aistudio/WhatsApp_Image_2025-11-20_at_12.29.19-removebg-preview__1__c9a0a08a.png'}
                     onChange={(e) => setProfileForm({ ...profileForm, logoUrl: e.target.value })}
                     className="w-full bg-white border border-slate-300 rounded-lg px-2 py-1 text-[11px] text-slate-700 font-mono"
                   />

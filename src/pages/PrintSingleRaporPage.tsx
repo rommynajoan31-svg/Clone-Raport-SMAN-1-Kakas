@@ -20,7 +20,7 @@ interface PrintSingleRaporProps {
 }
 
 export const PrintSingleRaporPage: React.FC<PrintSingleRaporProps> = ({ initialStudentId }) => {
-  const { classes, students, schoolProfile } = useApp();
+  const { classes, students, schoolProfile, updateSchoolProfile } = useApp();
   const raporRef = useRef<HTMLDivElement>(null);
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
 
@@ -129,6 +129,21 @@ export const PrintSingleRaporPage: React.FC<PrintSingleRaporProps> = ({ initialS
                 {c.name}
               </option>
             ))}
+          </select>
+
+          {/* Semester Selector */}
+          <select
+            value={schoolProfile.semesterAktif}
+            onChange={(e) => updateSchoolProfile({ semesterAktif: e.target.value as '1' | '2' })}
+            className={`border rounded-xl px-3 py-2 text-xs font-bold transition-all ${
+              schoolProfile.semesterAktif === '2'
+                ? 'bg-amber-50 text-amber-900 border-amber-300'
+                : 'bg-slate-50 text-slate-800 border-slate-300'
+            }`}
+            title="Pilih Semester: Semester 2 (Genap) menampilkan Keterangan Kenaikan Kelas"
+          >
+            <option value="1">Semester 1 (Ganjil)</option>
+            <option value="2">Semester 2 (Genap) ★ Kenaikan</option>
           </select>
 
           {/* Student Select */}

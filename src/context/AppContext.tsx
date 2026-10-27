@@ -140,7 +140,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
           alamat: parsed.alamat?.includes('Jl. Raya Kakas - Kaweng') ? initialSchoolProfile.alamat : (parsed.alamat || initialSchoolProfile.alamat),
           kodePos: parsed.kodePos === '95681' ? initialSchoolProfile.kodePos : (parsed.kodePos || initialSchoolProfile.kodePos),
           email: parsed.email === 'info@sman1kakas.sch.id' ? initialSchoolProfile.email : (parsed.email || initialSchoolProfile.email),
-          logoUrl: parsed.logoUrl || initialSchoolProfile.logoUrl,
+          logoUrl: (!parsed.logoUrl || parsed.logoUrl.includes('a44ed99c')) ? initialSchoolProfile.logoUrl : parsed.logoUrl,
           logoProvinsiUrl: parsed.logoProvinsiUrl || initialSchoolProfile.logoProvinsiUrl,
         };
       }

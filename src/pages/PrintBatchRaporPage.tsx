@@ -9,7 +9,7 @@ import { useApp } from '../context/AppContext';
 import { RaporSheet } from '../components/RaporSheet';
 
 export const PrintBatchRaporPage: React.FC = () => {
-  const { classes, students, schoolProfile } = useApp();
+  const { classes, students, schoolProfile, updateSchoolProfile } = useApp();
 
   const [selectedClassId, setSelectedClassId] = useState<string>(classes[0]?.id || '');
   const selectedClass = classes.find((c) => c.id === selectedClassId);
@@ -33,7 +33,25 @@ export const PrintBatchRaporPage: React.FC = () => {
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3">
+          <div>
+            <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">
+              Semester Aktif
+            </label>
+            <select
+              value={schoolProfile.semesterAktif}
+              onChange={(e) => updateSchoolProfile({ semesterAktif: e.target.value as '1' | '2' })}
+              className={`border rounded-xl px-3 py-2 text-xs font-bold transition-all ${
+                schoolProfile.semesterAktif === '2'
+                  ? 'bg-amber-50 text-amber-900 border-amber-300'
+                  : 'bg-slate-50 text-slate-800 border-slate-300'
+              }`}
+            >
+              <option value="1">Semester 1 (Ganjil)</option>
+              <option value="2">Semester 2 (Genap) ★ Kenaikan</option>
+            </select>
+          </div>
+
           <div>
             <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">
               Pilih Rombongan Belajar

@@ -19,15 +19,15 @@ export const ExtracurricularPage: React.FC = () => {
     deleteExtracurricular,
   } = useApp();
 
-  const [activeTab, setActiveTab] = useState<'P5' | 'EKSKUL'>('P5');
+  const [activeTab, setActiveTab] = useState<'KOKURIKULER' | 'EKSKUL'>('KOKURIKULER');
   const [selectedClassId, setSelectedClassId] = useState<string>(classes[0]?.id || '');
   const classStudents = students.filter((s) => s.classId === selectedClassId);
 
-  // P5 Project Modal
-  const [isP5ModalOpen, setIsP5ModalOpen] = useState(false);
-  const [p5FormData, setP5FormData] = useState({
+  // Kokurikuler Modal
+  const [isKokurikulerModalOpen, setIsKokurikulerModalOpen] = useState(false);
+  const [kokurikulerFormData, setKokurikulerFormData] = useState({
     title: '',
-    theme: 'Kearifan Lokal',
+    theme: 'Kearifan Lokal Minahasa',
     dimensions: ['Gotong Royong', 'Bernalar Kritis'],
     description: '',
   });
@@ -43,21 +43,27 @@ export const ExtracurricularPage: React.FC = () => {
 
   const classProjects = projects.filter((p) => p.classId === selectedClassId);
 
-  const handleSaveP5 = (e: React.FormEvent) => {
+  const handleSaveKokurikuler = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!p5FormData.title) return;
+    if (!kokurikulerFormData.title) return;
 
     saveProject({
       id: `prj_${Date.now()}`,
       classId: selectedClassId,
-      title: p5FormData.title,
-      theme: p5FormData.theme,
-      dimensions: p5FormData.dimensions,
-      description: p5FormData.description,
+      title: kokurikulerFormData.title,
+      theme: kokurikulerFormData.theme,
+      dimensions: kokurikulerFormData.dimensions,
+      description: kokurikulerFormData.description,
       studentNotes: {},
     });
 
-    setIsP5ModalOpen(false);
+    setIsKokurikulerModalOpen(false);
+    setKokurikulerFormData({
+      title: '',
+      theme: 'Kearifan Lokal Minahasa',
+      dimensions: ['Gotong Royong', 'Bernalar Kritis'],
+      description: '',
+    });
   };
 
   const handleSaveEkskul = (e: React.FormEvent) => {
@@ -75,21 +81,21 @@ export const ExtracurricularPage: React.FC = () => {
         <div>
           <h1 className="text-xl font-black text-slate-900 tracking-tight flex items-center gap-2">
             <Palette className="w-5 h-5 text-indigo-600" />
-            <span>Kokurikuler (P5) & Ekstrakurikuler</span>
+            <span>Kegiatan Kokurikuler & Ekstrakurikuler</span>
           </h1>
           <p className="text-xs text-slate-500 mt-0.5">
-            Pelaporan kegiatan projek penguatan profil pelajar pancasila dan pencapaian kegiatan ekstrakurikuler murid.
+            Pelaporan kegiatan kokurikuler dan pencapaian kegiatan ekstrakurikuler murid SMA Negeri 1 Kakas.
           </p>
         </div>
 
         <div className="flex items-center gap-2">
-          {activeTab === 'P5' ? (
+          {activeTab === 'KOKURIKULER' ? (
             <button
-              onClick={() => setIsP5ModalOpen(true)}
+              onClick={() => setIsKokurikulerModalOpen(true)}
               className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-4 py-2 rounded-xl text-xs shadow-md transition-all flex items-center gap-1.5"
             >
               <Plus className="w-4 h-4" />
-              <span>Tambah Tema Projek P5</span>
+              <span>Tambah Kegiatan Kokurikuler</span>
             </button>
           ) : (
             <button
@@ -107,14 +113,14 @@ export const ExtracurricularPage: React.FC = () => {
       <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-3">
         <div className="flex items-center gap-2">
           <button
-            onClick={() => setActiveTab('P5')}
+            onClick={() => setActiveTab('KOKURIKULER')}
             className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
-              activeTab === 'P5'
+              activeTab === 'KOKURIKULER'
                 ? 'bg-indigo-600 text-white shadow-xs'
                 : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
             }`}
           >
-            Kegiatan Kokurikuler (Projek P5)
+            Kegiatan Kokurikuler
           </button>
           <button
             onClick={() => setActiveTab('EKSKUL')}
@@ -144,8 +150,8 @@ export const ExtracurricularPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Tab Content 1: P5 */}
-      {activeTab === 'P5' && (
+      {/* Tab Content 1: Kokurikuler */}
+      {activeTab === 'KOKURIKULER' && (
         <div className="space-y-4">
           {classProjects.length > 0 ? (
             classProjects.map((prj) => (
@@ -156,7 +162,7 @@ export const ExtracurricularPage: React.FC = () => {
                 <div className="flex items-start justify-between">
                   <div>
                     <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-50 text-indigo-700 border border-indigo-200 uppercase">
-                      Tema: {prj.theme}
+                      Fokus / Tema: {prj.theme}
                     </span>
                     <h3 className="font-bold text-slate-900 text-base mt-1.5">{prj.title}</h3>
                     <p className="text-xs text-slate-600 mt-1 leading-relaxed">{prj.description}</p>
@@ -165,7 +171,7 @@ export const ExtracurricularPage: React.FC = () => {
 
                 <div className="pt-2 flex flex-wrap gap-1.5">
                   <span className="text-[11px] font-bold text-slate-500 mr-1 self-center">
-                    Dimensi Profil:
+                    Fokus Pengembangan Karakter:
                   </span>
                   {prj.dimensions.map((dim, idx) => (
                     <span
@@ -180,7 +186,7 @@ export const ExtracurricularPage: React.FC = () => {
             ))
           ) : (
             <div className="bg-white p-12 text-center rounded-2xl border border-slate-200 text-slate-500">
-              Belum ada tema projek P5 yang dicatat untuk rombel ini. Klik tombol di atas untuk menambahkan.
+              Belum ada kegiatan kokurikuler yang dicatat untuk rombel ini. Klik tombol di atas untuk menambahkan.
             </div>
           )}
         </div>
@@ -261,52 +267,53 @@ export const ExtracurricularPage: React.FC = () => {
         </div>
       )}
 
-      {/* P5 Modal */}
-      {isP5ModalOpen && (
+      {/* Kokurikuler Modal */}
+      {isKokurikulerModalOpen && (
         <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95">
             <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
-              <h3 className="font-bold text-slate-900 text-base">Tambah Projek Kokurikuler (P5)</h3>
-              <button onClick={() => setIsP5ModalOpen(false)} className="p-1 text-slate-400">
+              <h3 className="font-bold text-slate-900 text-base">Tambah Kegiatan Kokurikuler</h3>
+              <button onClick={() => setIsKokurikulerModalOpen(false)} className="p-1 text-slate-400">
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <form onSubmit={handleSaveP5} className="space-y-3 text-xs">
+            <form onSubmit={handleSaveKokurikuler} className="space-y-3 text-xs">
               <div>
-                <label className="block font-bold text-slate-700 mb-1">Tema Projek P5</label>
+                <label className="block font-bold text-slate-700 mb-1">Fokus / Tema Pembelajaran Kokurikuler</label>
                 <select
-                  value={p5FormData.theme}
-                  onChange={(e) => setP5FormData({ ...p5FormData, theme: e.target.value })}
+                  value={kokurikulerFormData.theme}
+                  onChange={(e) => setKokurikulerFormData({ ...kokurikulerFormData, theme: e.target.value })}
                   className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900"
                 >
-                  <option value="Kearifan Lokal">Kearifan Lokal Minahasa</option>
+                  <option value="Kearifan Lokal Minahasa">Kearifan Lokal Minahasa</option>
                   <option value="Gaya Hidup Berkelanjutan">Gaya Hidup Berkelanjutan</option>
                   <option value="Suara Demokrasi">Suara Demokrasi</option>
                   <option value="Kewirausahaan">Kewirausahaan</option>
                   <option value="Bangunlah Jiwa dan Raganya">Bangunlah Jiwa dan Raganya</option>
+                  <option value="Rekayasa dan Teknologi">Rekayasa dan Teknologi</option>
                 </select>
               </div>
 
               <div>
-                <label className="block font-bold text-slate-700 mb-1">Judul Kegiatan Projek</label>
+                <label className="block font-bold text-slate-700 mb-1">Judul Kegiatan Kokurikuler</label>
                 <input
                   type="text"
                   required
-                  value={p5FormData.title}
-                  onChange={(e) => setP5FormData({ ...p5FormData, title: e.target.value })}
+                  value={kokurikulerFormData.title}
+                  onChange={(e) => setKokurikulerFormData({ ...kokurikulerFormData, title: e.target.value })}
                   placeholder="Contoh: Pengolahan Eceng Gondok Danau Tondano"
                   className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 font-semibold"
                 />
               </div>
 
               <div>
-                <label className="block font-bold text-slate-700 mb-1">Deskripsi & Tujuan Projek</label>
+                <label className="block font-bold text-slate-700 mb-1">Deskripsi & Tujuan Kegiatan</label>
                 <textarea
                   rows={3}
-                  value={p5FormData.description}
-                  onChange={(e) => setP5FormData({ ...p5FormData, description: e.target.value })}
-                  placeholder="Penjelasan ringkas aktivitas projek yang dilakukan murid..."
+                  value={kokurikulerFormData.description}
+                  onChange={(e) => setKokurikulerFormData({ ...kokurikulerFormData, description: e.target.value })}
+                  placeholder="Penjelasan ringkas aktivitas kokurikuler yang dilakukan murid..."
                   className="w-full bg-slate-50 border border-slate-300 rounded-xl p-3 text-slate-900 leading-relaxed"
                 />
               </div>
@@ -314,7 +321,7 @@ export const ExtracurricularPage: React.FC = () => {
               <div className="pt-3 border-t border-slate-100 flex items-center justify-end gap-2">
                 <button
                   type="button"
-                  onClick={() => setIsP5ModalOpen(false)}
+                  onClick={() => setIsKokurikulerModalOpen(false)}
                   className="px-4 py-2 font-semibold text-slate-600 hover:bg-slate-100 rounded-xl"
                 >
                   Batal
@@ -323,7 +330,7 @@ export const ExtracurricularPage: React.FC = () => {
                   type="submit"
                   className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-4 py-2 rounded-xl shadow-md"
                 >
-                  Simpan Projek
+                  Simpan Kegiatan Kokurikuler
                 </button>
               </div>
             </form>

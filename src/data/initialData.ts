@@ -32,7 +32,7 @@ export const initialSchoolProfile: SchoolProfile = {
   website: 'https://sman1kakas.sch.id',
   namaKepalaSekolah: 'Drs. Ronald Rondonuwu, M.Pd.',
   nipKepalaSekolah: '19710412 199802 1 003',
-  logoUrl: '/assets/aistudio/WhatsApp_Image_2025-11-20_at_12.29.19-removebg-preview_a44ed99c.png',
+  logoUrl: '/assets/aistudio/WhatsApp_Image_2025-11-20_at_12.29.19-removebg-preview__1__c9a0a08a.png',
   logoProvinsiUrl: '/assets/aistudio/logo_provinsi-removebg-preview_d8eb1c16.png',
   tempatPenerbitan: 'Kakas',
   tanggalRapor: '19 Desember 2026',
@@ -885,7 +885,7 @@ export const initialProjects: CocurricularProject[] = [
     description: 'Murid melakukan observasi lapangan ke sempadan danau di Kakas, mengidentifikasi ancaman sedimentasi, serta membuat produk pupuk kompos dan kerajinan serat enceng gondok.',
     studentNotes: {
       std_01: 'Sangat aktif dalam investigasi pencemaran air dan merancang prototipe kompos organik bersama kelompok.',
-      std_02: 'Menunjukkan kepemimpinan gotong royong yang luar biasa dalam penyusunan laporan ilmiah projek.',
+      std_02: 'Menunjukkan kepemimpinan gotong royong yang luar biasa dalam penyusunan laporan ilmiah kegiatan kokurikuler.',
       std_03: 'Berpartisipasi aktif dalam pengumpulan bahan baku dan pembuatan media presentasi hasil karya.',
     },
   },

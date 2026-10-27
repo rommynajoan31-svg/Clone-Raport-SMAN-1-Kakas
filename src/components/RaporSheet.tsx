@@ -24,6 +24,7 @@ export const RaporSheet: React.FC<RaporSheetProps> = ({ student, showWatermark =
     extracurriculars,
     projects,
     homeroomNotes,
+    updateStudent,
   } = useApp();
 
   const studentClass = classes.find((c) => c.id === student.classId);
@@ -90,6 +91,20 @@ export const RaporSheet: React.FC<RaporSheetProps> = ({ student, showWatermark =
     return sc && (sc.status === 'FINAL' || sc.status === 'DISETUJUI');
   });
 
+  // Default promotion decision calculation for Semester Genap
+  const getDefaultPromotion = () => {
+    if (student.grade === 10) return 'NAIK KE KELAS XI (SEBELAS)';
+    if (student.grade === 11) return 'NAIK KE KELAS XII (DUA BELAS)';
+    if (student.grade === 12) return 'LULUS DARI SATUAN PENDIDIKAN SMA NEGERI 1 KAKAS';
+    return 'NAIK KELAS';
+  };
+
+  const currentPromotion = student.promotionDecision || getDefaultPromotion();
+
+  const handleUpdatePromotion = (decision: string) => {
+    updateStudent(student.id, { promotionDecision: decision });
+  };
+
   return (
     <div className="bg-white text-slate-900 font-sans p-6 sm:p-10 max-w-[210mm] mx-auto shadow-xl border border-slate-200 rounded-lg print:shadow-none print:border-none print:p-0 print:m-0 print:max-w-none text-xs leading-relaxed relative">
       {/* Official Kop Rapor SMA Negeri 1 Kakas */}
@@ -126,7 +141,7 @@ export const RaporSheet: React.FC<RaporSheetProps> = ({ student, showWatermark =
           {/* Logo Kanan: Logo Sekolah SMA Negeri 1 Kakas */}
           <div className="w-20 h-20 flex items-center justify-center shrink-0">
             <img
-              src={schoolProfile.logoUrl || '/assets/aistudio/WhatsApp_Image_2025-11-20_at_12.29.19-removebg-preview_a44ed99c.png'}
+              src={schoolProfile.logoUrl || '/assets/aistudio/WhatsApp_Image_2025-11-20_at_12.29.19-removebg-preview__1__c9a0a08a.png'}
               alt="Logo SMA Negeri 1 Kakas"
               className="w-16 h-16 object-contain"
             />
@@ -193,9 +208,15 @@ export const RaporSheet: React.FC<RaporSheetProps> = ({ student, showWatermark =
             <span className="font-medium text-slate-800">{schoolProfile.tahunPelajaranAktif}</span>
           </div>
           <div className="flex">
-            <span className="w-32 text-slate-600">Status Kelulusan/Kenaikan</span>
+            <span className="w-32 text-slate-600">
+              {schoolProfile.semesterAktif === '2' ? 'Keputusan Akhir' : 'Status Belajar'}
+            </span>
             <span className="w-3">:</span>
-            <span className="font-semibold text-emerald-700">Aktif Mengikuti Pembelajaran</span>
+            <span className="font-semibold text-emerald-700">
+              {schoolProfile.semesterAktif === '2'
+                ? currentPromotion
+                : 'Aktif Mengikuti Pembelajaran'}
+            </span>
           </div>
         </div>
       </div>
@@ -308,36 +329,48 @@ export const RaporSheet: React.FC<RaporSheetProps> = ({ student, showWatermark =
         </table>
       </div>
 
-      {/* Bagian 3: Pelaporan Kegiatan Kokurikuler (P5) */}
+      {/* Bagian B: Kegiatan Kokurikuler */}
       <div className="mb-4">
-        <h3 className="font-bold text-slate-900 text-xs uppercase mb-1.5">
-          B. Pelaporan Kegiatan Kokurikuler (Projek Penguatan Profil Pelajar Pancasila)
+        <h3 className="font-bold text-slate-900 text-xs uppercase mb-1.5 flex items-center justify-between">
+          <span>B. Kegiatan Kokurikuler</span>
+          <span className="text-[10px] font-normal text-slate-500 italic">
+            Penguatan Karakter, Kolaborasi & Praktik Pembelajaran Nyata
+          </span>
         </h3>
         {classProjects.length > 0 ? (
-          <div className="border border-slate-900 p-2.5 rounded text-[10.5px] space-y-2 bg-slate-50/40">
-            {classProjects.map((prj) => {
-              const note = prj.studentNotes?.[student.id] || prj.description;
-              return (
-                <div key={prj.id} className="border-b border-slate-200 pb-2 last:border-none last:pb-0">
-                  <div className="flex items-center justify-between font-semibold text-slate-900">
-                    <span>{prj.title}</span>
-                    <span className="text-[10px] bg-blue-100 text-blue-900 px-1.5 py-0.5 rounded">
-                      Tema: {prj.theme}
-                    </span>
-                  </div>
-                  <p className="text-[10px] text-slate-600 mt-0.5">
-                    Dimensi: {prj.dimensions.join(' • ')}
-                  </p>
-                  <p className="text-[10.5px] text-slate-800 mt-1 leading-normal italic">
-                    "{note}"
-                  </p>
-                </div>
-              );
-            })}
-          </div>
+          <table className="w-full border-collapse border border-slate-900 text-[10.5px]">
+            <thead>
+              <tr className="bg-slate-100 font-bold border-b border-slate-900">
+                <th className="border border-slate-900 px-2 py-1.5 text-center w-8">No</th>
+                <th className="border border-slate-900 px-2 py-1.5 text-left w-56">Kegiatan Kokurikuler</th>
+                <th className="border border-slate-900 px-2 py-1.5 text-left">Deskripsi Keterlibatan & Capaian Murid</th>
+              </tr>
+            </thead>
+            <tbody>
+              {classProjects.map((prj, idx) => {
+                const note = prj.studentNotes?.[student.id] || prj.description;
+                return (
+                  <tr key={prj.id} className="border-b border-slate-400">
+                    <td className="border border-slate-900 px-2 py-1.5 text-center align-top font-medium">
+                      {idx + 1}
+                    </td>
+                    <td className="border border-slate-900 px-2 py-1.5 align-top">
+                      <div className="font-bold text-slate-900 leading-snug">{prj.title}</div>
+                      <div className="text-[9.5px] text-blue-900 font-medium mt-0.5">
+                        Fokus: {prj.theme}
+                      </div>
+                    </td>
+                    <td className="border border-slate-900 px-2.5 py-1.5 text-justify align-top leading-normal">
+                      {note}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         ) : (
           <p className="text-[10.5px] text-slate-500 italic border border-slate-300 p-2 rounded">
-            Kegiatan kokurikuler dilaporkan dalam buku laporan projek tersendiri pada akhir fase.
+            Kegiatan kokurikuler dicatat secara berkala sesuai kalender akademik satuan pendidikan.
           </p>
         )}
       </div>
@@ -434,6 +467,126 @@ export const RaporSheet: React.FC<RaporSheetProps> = ({ student, showWatermark =
           )}
         </div>
       </div>
+
+      {/* Bagian F: Keterangan Kenaikan Kelas / Kelulusan (Khusus Semester Genap) */}
+      {schoolProfile.semesterAktif === '2' && (
+        <div className="mb-5 page-break-inside-avoid">
+          <h3 className="font-bold text-slate-900 text-xs uppercase mb-1.5 flex items-center justify-between">
+            <span>F. Keterangan Kenaikan Kelas / Kelulusan</span>
+            <span className="text-[10px] font-normal text-slate-500 italic">
+              Semester 2 (Genap) Tahun Pelajaran {schoolProfile.tahunPelajaranAktif}
+            </span>
+          </h3>
+
+          <div className="border-2 border-slate-900 p-3.5 rounded bg-slate-50/70 text-[11px] leading-relaxed">
+            {/* Quick interactive selector in preview (hidden in print) */}
+            <div className="print:hidden mb-2.5 pb-2 border-b border-slate-200 flex items-center justify-between flex-wrap gap-2">
+              <span className="text-[10px] font-bold text-slate-600 uppercase">
+                Pilih Keputusan Kenaikan / Kelulusan:
+              </span>
+              <div className="flex items-center gap-1.5">
+                {student.grade === 10 && (
+                  <>
+                    <button
+                      type="button"
+                      onClick={() => handleUpdatePromotion('NAIK KE KELAS XI (SEBELAS)')}
+                      className={`px-2.5 py-1 rounded text-[10.5px] font-bold border transition-all ${
+                        currentPromotion === 'NAIK KE KELAS XI (SEBELAS)'
+                          ? 'bg-emerald-600 text-white border-emerald-700 shadow-xs'
+                          : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-100'
+                      }`}
+                    >
+                      ✓ Naik ke Kelas XI (Sebelas)
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleUpdatePromotion('TINGGAL DI KELAS X (SEPULUH)')}
+                      className={`px-2.5 py-1 rounded text-[10.5px] font-bold border transition-all ${
+                        currentPromotion === 'TINGGAL DI KELAS X (SEPULUH)'
+                          ? 'bg-red-600 text-white border-red-700 shadow-xs'
+                          : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-100'
+                      }`}
+                    >
+                      ✗ Tinggal di Kelas X (Sepuluh)
+                    </button>
+                  </>
+                )}
+                {student.grade === 11 && (
+                  <>
+                    <button
+                      type="button"
+                      onClick={() => handleUpdatePromotion('NAIK KE KELAS XII (DUA BELAS)')}
+                      className={`px-2.5 py-1 rounded text-[10.5px] font-bold border transition-all ${
+                        currentPromotion === 'NAIK KE KELAS XII (DUA BELAS)'
+                          ? 'bg-emerald-600 text-white border-emerald-700 shadow-xs'
+                          : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-100'
+                      }`}
+                    >
+                      ✓ Naik ke Kelas XII (Dua Belas)
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleUpdatePromotion('TINGGAL DI KELAS XI (SEBELAS)')}
+                      className={`px-2.5 py-1 rounded text-[10.5px] font-bold border transition-all ${
+                        currentPromotion === 'TINGGAL DI KELAS XI (SEBELAS)'
+                          ? 'bg-red-600 text-white border-red-700 shadow-xs'
+                          : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-100'
+                      }`}
+                    >
+                      ✗ Tinggal di Kelas XI (Sebelas)
+                    </button>
+                  </>
+                )}
+                {student.grade === 12 && (
+                  <>
+                    <button
+                      type="button"
+                      onClick={() => handleUpdatePromotion('LULUS DARI SATUAN PENDIDIKAN SMA NEGERI 1 KAKAS')}
+                      className={`px-2.5 py-1 rounded text-[10.5px] font-bold border transition-all ${
+                        !currentPromotion.startsWith('TIDAK')
+                          ? 'bg-emerald-600 text-white border-emerald-700 shadow-xs'
+                          : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-100'
+                      }`}
+                    >
+                      ✓ Lulus dari Satuan Pendidikan
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleUpdatePromotion('TIDAK LULUS DARI SATUAN PENDIDIKAN SMA NEGERI 1 KAKAS')}
+                      className={`px-2.5 py-1 rounded text-[10.5px] font-bold border transition-all ${
+                        currentPromotion.startsWith('TIDAK')
+                          ? 'bg-red-600 text-white border-red-700 shadow-xs'
+                          : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-100'
+                      }`}
+                    >
+                      ✗ Tidak Lulus
+                    </button>
+                  </>
+                )}
+              </div>
+            </div>
+
+            {/* Official Kemendikbudristek Statement */}
+            <p className="text-slate-800 font-medium">
+              Berdasarkan hasil pembelajaran yang dicapai pada Semester Ganjil dan Semester Genap Tahun Pelajaran {schoolProfile.tahunPelajaranAktif}, serta kriteria kelulusan/kenaikan kelas yang ditetapkan oleh Satuan Pendidikan:
+            </p>
+
+            <div className="my-2.5 p-3.5 border border-slate-900 bg-white text-center rounded shadow-xs">
+              <span className="block text-[10px] text-slate-500 font-bold uppercase tracking-wider mb-1">
+                Keputusan Resmi:
+              </span>
+              <span className="text-sm font-black tracking-wider text-slate-900 uppercase">
+                {currentPromotion}
+              </span>
+            </div>
+
+            <div className="flex items-center justify-between text-[9px] text-slate-500 italic pt-0.5">
+              <span>* Dicantumkan resmi pada laporan hasil belajar akhir tahun pelajaran (Semester Genap).</span>
+              <span>SMA Negeri 1 Kakas</span>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Bagian 7: Pengesahan dan Tanda Tangan */}
       <div className="pt-2 text-[11px] page-break-inside-avoid">
