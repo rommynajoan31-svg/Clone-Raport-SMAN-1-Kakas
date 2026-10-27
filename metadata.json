@@ -1,0 +1,6 @@
+{
+  "name": "RAPOR KAKAS AI",
+  "description": "Sistem Informasi Pengolahan dan Pelaporan Hasil Belajar Murid SMA Negeri 1 Kakas berdasarkan Panduan Pembelajaran dan Asesmen (PPA) Edisi Revisi 2025 Kurikulum Merdeka Fase E & F.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
