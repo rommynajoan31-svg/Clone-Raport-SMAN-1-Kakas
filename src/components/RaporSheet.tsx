@@ -141,9 +141,17 @@ export const RaporSheet: React.FC<RaporSheetProps> = ({ student, showWatermark =
           {/* Logo Kanan: Logo Sekolah SMA Negeri 1 Kakas */}
           <div className="w-20 h-20 flex items-center justify-center shrink-0">
             <img
-              src={schoolProfile.logoUrl || '/assets/aistudio/WhatsApp_Image_2025-11-20_at_12.29.19-removebg-preview__1__c9a0a08a.png'}
+              src={schoolProfile.logoUrl || '/assets/aistudio/logo_sman1kakas.png'}
               alt="Logo SMA Negeri 1 Kakas"
               className="w-16 h-16 object-contain"
+              onError={(e) => {
+                const target = e.currentTarget;
+                if (!target.src.includes('logo_sman1kakas.png')) {
+                  target.src = '/assets/aistudio/logo_sman1kakas.png';
+                } else if (!target.src.includes('WhatsApp_Image_2025-11-20_at_12.29.19-removebg-preview_a44ed99c.png')) {
+                  target.src = '/assets/aistudio/WhatsApp_Image_2025-11-20_at_12.29.19-removebg-preview_a44ed99c.png';
+                }
+              }}
             />
           </div>
         </div>

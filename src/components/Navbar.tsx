@@ -54,7 +54,17 @@ export const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar, isSidebarOpen }
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-xl bg-white flex items-center justify-center p-1 shadow-xs border border-slate-200 overflow-hidden shrink-0">
               {schoolProfile.logoUrl ? (
-                <img src={schoolProfile.logoUrl} alt="Logo SMAN 1 Kakas" className="w-full h-full object-contain" />
+                <img
+                  src={schoolProfile.logoUrl || '/assets/aistudio/logo_sman1kakas.png'}
+                  alt="Logo SMAN 1 Kakas"
+                  className="w-full h-full object-contain"
+                  onError={(e) => {
+                    const target = e.currentTarget;
+                    if (!target.src.includes('logo_sman1kakas.png')) {
+                      target.src = '/assets/aistudio/logo_sman1kakas.png';
+                    }
+                  }}
+                />
               ) : (
                 <School className="w-5 h-5 text-blue-900" />
               )}

@@ -13,6 +13,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json({ limit: '10mb' }));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Initialize Gemini SDK with User-Agent as required by AI Studio guidelines
 const rawApiKey = process.env.GEMINI_API_KEY || '';
